@@ -2,6 +2,8 @@ var express = require('express');
 
 var app = express();
 
+var fortune = require('./lib/fortune.js');
+
 //set up  handlebars view engine
 //指定了默认布局为main,除非特殊指明,都用这个
 var handlebars = require('express3-handlebars').create({ defaultLayout:'main' });
@@ -14,25 +16,15 @@ app.set('port', process.env.PORT || 3000);
 //渲染文件(不经过任何特殊处理)并发送给客户端
 app.use(express.static(__dirname + '/public'));
 
-//virtual array of lucky cookies
-var fortunes = [
-  "Conquer your fears or they will conquer you.",
-  "Rivers need springs.",
-  "Do not fear what you don't know",
-  "You will have a pleasant surprise.",
-  "Whenever possible, keep it simple.",
-];
-
 //app.get 是用来设置路由的方法
 app.get('/', function(req, res) {
-  // res.type('text/html');
   res.render('home');
+  // res.type('text/html');
   // res.send('Meadowlark Travel');
 });
 
 app.get('/about', function(req, res) {
-  var randomFortune = fortunes[Math.floor(Math.random() * fortunes.length)];
-  res.render('about', { fortune: randomFortune});
+  res.render('about', { fortune: fortune.getFortune() });
   // res.type('text/plain');
   // res.send('About Meadowlark Travel');
 });
