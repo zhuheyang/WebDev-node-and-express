@@ -1,0 +1,15 @@
+{
+  "name": "meadowlark",
+  "version": "0.0.1",
+  "description": "create a website name meadowlark through express",
+  "main": "meadowlark.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Lin Jhongwun",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.16.1",
+    "express3-handlebars": "^0.5.2"
+  }
+}
