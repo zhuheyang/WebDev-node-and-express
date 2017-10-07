@@ -4,7 +4,7 @@ var app = express();
 
 var fortune = require('./lib/fortune.js');
 
-//set up  handlebars view engine
+//set up handlebars view engine
 //指定了默认布局为main,除非特殊指明,都用这个
 var handlebars = require('express3-handlebars').create({ defaultLayout:'main' });
 app.engine('handlebars', handlebars.engine);
@@ -16,6 +16,15 @@ app.set('port', process.env.PORT || 3000);
 //渲染文件(不经过任何特殊处理)并发送给客户端
 app.use(express.static(__dirname + '/public'));
 
+/* 该中间件来检测查询字符串的test=1 必须放在所有路由之前 */
+app.use(function(req, res, next) {
+  //不处于生产环境中,env means Environment, includes two types, the other is dev.
+  //用一个url参数来打开测试
+  res.locals.showTests = app.get('env') !== 'production' && 
+    req.query.test === '1';
+  next();
+});
+
 //app.get 是用来设置路由的方法
 app.get('/', function(req, res) {
   res.render('home');
@@ -24,9 +33,26 @@ app.get('/', function(req, res) {
 });
 
 app.get('/about', function(req, res) {
-  res.render('about', { fortune: fortune.getFortune() });
+  //在路由中应指明视图应该使用哪个页面测试文件
+  res.render('about', { 
+    fortune: fortune.getFortune(),
+    pageTestScript: '/qa/tests-about.js'
+   });
   // res.type('text/plain');
   // res.send('About Meadowlark Travel');
+});
+
+// 为联系表单的RequestGroupRate页面与点击连接hood-river页面设置路由
+app.get('/tours/hood-river', function(req, res) {
+  res.render('tours/hood-river');
+});
+app.get('/tours/request-group-rate', function(req, res) {
+  res.render('tours/request-group-rate');
+});
+
+// 为oregan-coast设置路由
+app.get('tours/oregon-coast', function(req, res) {
+  res.render('tours/oregon-coast');
 });
 
 //app.use是添加中间件的方法

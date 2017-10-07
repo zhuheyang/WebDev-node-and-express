@@ -1,4 +1,0 @@
-# warning: minimatch@0.3.0: Please update to minimatch 3.0.2 or higher to avoid a RegExp DoS issue
-这里有一个warning, RegExp, 暂时还不知道是什么.
-# .vimrc文件进行编辑器相关设置
-# public文件夹之所以叫public: 是因为该目录下所有文件都会直接对外开放!
