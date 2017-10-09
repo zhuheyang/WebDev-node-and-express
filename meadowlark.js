@@ -37,7 +37,7 @@ app.get('/about', function(req, res) {
   res.render('about', { 
     fortune: fortune.getFortune(),
     pageTestScript: '/qa/tests-about.js'
-   });
+  });
   // res.type('text/plain');
   // res.send('About Meadowlark Travel');
 });
@@ -77,3 +77,5 @@ app.listen(app.get('port'), function() {
   console.log('Express started on http://localhost:' +
      app.get('port') + '; press Ctrl-C to terminate.');
 });
+
+// if( app.thing == null) console.log( 'bleat! ');
