@@ -101,5 +101,9 @@ Grunt中loadNpmTask,可使用forEach方法将创建的数组中的插件名称�
 
 # 表单处理 form-processing
 
+req.xhr与req.accepts 两个Express提供的属性:
+XHR(XML HTTP), 如果是AJAX请求,req.xhr值为true,同时req.accepts视图确定返回的最佳响应类型
+处理AJAX表单与普通的html表单 
+
 
 
