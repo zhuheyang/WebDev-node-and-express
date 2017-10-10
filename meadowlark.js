@@ -102,7 +102,7 @@ app.get('/tours/oregon-coast', function(req, res) {
 
 //测试querytest页面,设置路由
 app.get('/jquery-test', function(req, res) {
-  res.render('jquerytest');
+  res.render('jquery-test');
 });
 
 //app.use是添加中间件的方法
