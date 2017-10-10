@@ -6,7 +6,17 @@ var fortune = require('./lib/fortune.js');
 
 //set up handlebars view engine
 //指定了默认布局为main,除非特殊指明,都用这个
-var handlebars = require('express3-handlebars').create({ defaultLayout:'main' });
+var handlebars = require('express3-handlebars').create({ 
+  defaultLayout:'main',
+  helpers : {
+    section: function() {
+      if(!this._sections) { this._sections = {};}
+      this._sections[name] = options.fn(this);
+      return null;
+    }
+  }
+});
+
 app.engine('handlebars', handlebars.engine);
 app.set('view engine', 'handlebars');
 
@@ -88,6 +98,11 @@ app.get('/tours/request-group-rate', function(req, res) {
 // 为oregan-coast设置路由
 app.get('/tours/oregon-coast', function(req, res) {
   res.render('tours/oregon-coast');
+});
+
+//测试querytest页面,设置路由
+app.get('/jquerytest', function(req, res) {
+  res.render('jquerytest');
 });
 
 //app.use是添加中间件的方法
