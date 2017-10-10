@@ -1,0 +1,47 @@
+{{#section 'head'}}
+  <script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.3.0/handlebars.min.js"></script>
+
+  <script id="nurseryRhymeTemplate" type="text/x-handlebars-template">
+    Marry had a little <b>\{{animal}}</b>, its <b>\{{bodyPart}}</b>
+    was <b>\{{adjective}}</b> as <b>\{{noun}}</b>.
+  {{! 此处至少要转义一个大括号,否则服务器端视图会尝试对其转换, 从而导致```}}
+  </script>
+{{/section}}
+
+<div id="nurseryRhyme">Click a button....</div>
+<hr>
+<button id="btnNurseryRhyme">Generate nursery rhyme</button>
+<button id="btnNurseryRhymeAjax">Generate nursery rhyme from AJAX</button>
+
+{{#section 'jquery'}}
+  <script>
+    $(document).ready(function() {
+      //Handlebars在此为对象,调用的时候记得大写第一个字母!
+      var nurseryRhymeTemplate = Handlebars.complie(
+        $('#nurseryRhymeTemplate').html());
+      
+      var $nurseryRhyme = $('#nurseryRhyme');
+
+      $('#btnNurseryRhyme').on('click', function(evt) {
+        evt.preventDefault();
+        $nurseryRhyme.html(nurseryRhymeTemplate({
+          animal: 'basilisk',
+          bodyPart: 'tail',
+          adjective: 'sharp',
+          noun: 'a needle'
+        }));
+      });
+
+      $('#btnNurseryRhymeAjax').on('click', function(evt) {
+        evt.preventDefault();
+        $.ajax('/data/nursery-rhyme', {
+          success: function(data) {
+            $nurseryRhyme.html(
+              nurseryRhymeTemplate(data)
+            );
+          }
+        });
+      });
+    });
+  </script>
+{{/section}}
