@@ -105,6 +105,19 @@ app.get('/jquery-test', function(req, res) {
   res.render('jquery-test');
 });
 
+//针对nursery-rhyme视图与AJAX调用的路由处理程序
+app.get('/nursery-rhyme', function(req, res) {
+  res.render('nursery-rhyme');
+});
+app.get('/data/nursery-rhyme', function(req, res) {
+  res.json({
+    animal: 'squirrel',
+    bodyPart: 'tail',
+    adjective: 'bushy',
+    noun: 'heck',
+  });
+});
+
 //app.use是添加中间件的方法
 //定制404页面 404 catch-all 处理器(中间件middleware)
 app.use(function(req, res) {
