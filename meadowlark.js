@@ -9,7 +9,7 @@ var fortune = require('./lib/fortune.js');
 var handlebars = require('express3-handlebars').create({ 
   defaultLayout:'main',
   helpers : {
-    section: function() {
+    section: function(name, options) {
       if(!this._sections) { this._sections = {};}
       this._sections[name] = options.fn(this);
       return null;
@@ -101,7 +101,7 @@ app.get('/tours/oregon-coast', function(req, res) {
 });
 
 //测试querytest页面,设置路由
-app.get('/jquerytest', function(req, res) {
+app.get('/jquery-test', function(req, res) {
   res.render('jquerytest');
 });
 
@@ -115,7 +115,7 @@ app.use(function(req, res) {
 });
 
 //定制500页面 500错误处理器(中间件)
-app.use(function(req, res) {
+app.use(function(err, req, res) {
   console.error(err.stack);
   res.status(500);
   res.render('500');
