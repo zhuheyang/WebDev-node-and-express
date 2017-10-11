@@ -108,6 +108,16 @@ XHR(XML HTTP), 如果是AJAX请求,req.xhr值为true,同时req.accepts视图确�
 Twitter Bootstrap风格
 
 # 文件上传
+
+# cookie
+
+# session
+
+# middleware
+
+In the previous examples, our middleware will use statement:"return next();" to early terminate,  
+Express does not expect middleware's return value, and it will never use the value to do anythin,  
+Therefore, this just shorten the 'next();' and 'return;'.
  
 
 
