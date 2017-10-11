@@ -149,6 +149,7 @@ app.post('/process', function(req, res){
   }
 });
 
+//add the fomidable modules, and its router handling code
 var formidable = require('formidable');
 
 app.get('/contest/vacation-photo', function(req, res) {
@@ -171,6 +172,21 @@ app.post('/contest/vacation-photo/:year/:month', function(req, res) {
   });
 });
 //":year", ":month" s路由参数
+
+//jQuery文件上传(写注释不要总是在写是什么,而是写为什么!)
+var jqupload = require('jquery-file-upload-middleware');
+
+app.use('/upload', function(req, res, next) {
+  var now = Date.now();
+  jqupload.fileHandler({
+    uploadDir: function(){
+      return __dirname + '/public/uploads/' + now;
+    },
+    uploadUrl: function(){
+      return 'up/uploads/' + now;
+    },
+  })(req, res, next);
+});
 
 
 //app.use是添加中间件的方法
