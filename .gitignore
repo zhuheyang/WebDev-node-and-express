@@ -1,6 +1,8 @@
 # ignore packages installed by npm
 # and its subdirectory will also ignore the specific files!
 node_modules
+jqfu
+credentials.js
 *~
 .DS_Store
 # you can put any other files you don't want to check in here,
