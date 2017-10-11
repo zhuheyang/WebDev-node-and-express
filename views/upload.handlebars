@@ -1,0 +1,31 @@
+{{#head}}
+  <link rel="stylesheet" href="/upload.css">
+{{/head}}
+<span class="btn btn-default btn-file">
+  Upload
+  <input type="file" class="form-control" required="required" accept="image/*" 
+    id="fieldPhoto" data-url="/upload" multiple="multiple" name="photo">
+</span>
+<div id="uploads"></div>
+{{!-- 下面的是jQueryFileUpload的添加 --}}
+{{#section 'jquery'}}
+  <script src="/vendor/jqfu/js/vendor/jquery.ui.widget.js"></script>
+  <script src="vendor/jqfu/js/jquery.iframe-transport.js"></script>
+  <script src="/vendor/jqfu/js/jquery.fileupload.js"></script>
+
+  <script>
+    $(document).ready(function() {
+
+      $('#fieldPhoto').fileupload({
+        dataType: 'json',
+        done: function(e, data) {
+          $.each(data.result.files, function(index, file) {
+            $('#fileUploads').append($('<div class="upload">' + 
+              '<span class="glyphicon glyphicon-ok"></span>' +
+              '&nbsp;' + file.originalName + '</div>'));
+          });
+        }
+      });
+    });
+  </script>
+{{/section}}
