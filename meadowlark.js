@@ -96,6 +96,12 @@ app.use(session({
 //引入exemption clause middleware
 app.use(require('./lib/requiresWaiver.js'));
 
+//引入shopping cart validation middleware
+var cartValidation = require('./lib/cartValidation.js');
+
+app.use(cartValidation.checkWaivers);
+app.use(cartValidation.checkGuestCounts);
+
 //app.get 是用来设置路由的方法
 app.get('/', function(req, res) {
   res.render('home');
