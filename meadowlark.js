@@ -4,10 +4,14 @@ var app = express();
 
 var fortune = require('./lib/fortune.js');
 
+// var credentials = require('./credentials.js');
+
 //set up handlebars view engine
 //指定了默认布局为main,除非特殊指明,都用这个
 var handlebars = require('express3-handlebars').create({ 
   defaultLayout:'main',
+  partialsDir: 'views/partials',
+  layoutDir: '/views',
   helpers : {
     section: function(name, options) {
       if(!this._sections) { this._sections = {};}
@@ -70,6 +74,25 @@ app.use(function(req, res, next) {
   next();
 });
 
+//设置和访问cookie
+// var cookie = require('cookie-parser');
+// app.use(cookie)(credentials.cookieSecret);
+
+//if use code snippet above, it will turns:
+//TypeError: Cannot create property 'next' on string '2p+)L$-zlcIX-TP'
+
+//链入cookie-parser中间件后,链入express-session中间件
+var credentials = {
+  cookieSecret: '2p+)L$-zlcIX-TP',
+};
+
+var session = require('express-session');
+app.use(session({
+  resave: false,
+  saveUninitialized: false,
+  secret: credentials.cookieSecret,
+}));
+
 //app.get 是用来设置路由的方法
 app.get('/', function(req, res) {
   res.render('home');
@@ -102,7 +125,9 @@ app.get('/tours/oregon-coast', function(req, res) {
 
 //测试querytest页面,设置路由
 app.get('/jquery-test', function(req, res) {
-  res.render('jquery-test');
+  res.render('jquery-test', {
+    section: 'jquery',
+  });
 });
 
 //针对nursery-rhyme视图与AJAX调用的路由处理程序
@@ -124,13 +149,48 @@ app.get('/thank-you', function(req, res) {
 });
 
 //处理表单请求,重定向到303
+
+// introduce/inlet the 'body-parser' middleware
 app.use(require('body-parser')());
 
 app.get('/newsletter', function(req, res) {
   //we will learn CSRF later, at the moment, only provide a dummy value
-  res.render('newsletter', { csrf:'CSRF token goes there' });
+  res.render('newsletter', { csrf:'CSRF token goes there', });
 });
 
+// app.post('/newsletter', function(req, res) {
+//   var name = req.body.name || '', email = req.body.email || '';
+//   //input certificate
+//   if(!email.match(VALID_EMAIL_REGEX)) {
+//     if(req.xhr) { return res.json({ error: 'Invalid name email address.'}); }
+//     req.session.flash = {
+//       type: 'danger',
+//       intro: 'Validation error!',
+//       message: 'The email address you entered was not ',
+//     };
+//     return res.redirect(303, '/newsletter/archive');
+//   }
+
+//   new NewsletterSignup({ name: name, email: email }).save(function(err) {
+//     if(err) {
+//       req.session.flash = {
+//         type: 'danger',
+//         intro: 'Database error!',
+//         message: 'There was a database error; please try again later.',
+//       };
+//       return res.redirect(303, '/newsletter/archive');
+//     }
+//     if(req.xhr) { return res.json({ success: true }); }
+//     req.session.flash = {
+//       type: 'success',
+//       intro: 'Thank you!',
+//       message: 'You have now been signed up for the newsletter.',
+//     };
+//     return res.direct(303, '/newsletter/archive');
+//   });
+// });
+
+// this is the html one.
 // app.post('/process', function(req, res) {
 //   console.log('From (from querystring): ' + req.query.form);
 //   console.log('CSRF token (from hidden form field): ' + req.body._csrf);
@@ -139,6 +199,7 @@ app.get('/newsletter', function(req, res) {
 //   res.redirect(303,'/thank-you');
 // });
 
+// this is the AJAX one.
 app.post('/process', function(req, res){
   if(req.xhr || req.accepts('json,html') === 'json') {
     //if ERROR, send {error: 'error description' }
@@ -187,6 +248,15 @@ app.use('/upload', function(req, res, next) {
     },
   })(req, res, next);
 });
+
+//If sessions has flash object, add it into the context.
+//After it show once, you should delete the flash, use the code below:
+// app.use(function(req, res, next) {
+//   //if flash, pass it to context, then delete it
+//   res.locals.flash = req.session.flash;
+//   delete req.session.flash;
+//   next();
+// });
 
 
 //app.use是添加中间件的方法
