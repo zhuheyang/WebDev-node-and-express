@@ -93,6 +93,9 @@ app.use(session({
   secret: credentials.cookieSecret,
 }));
 
+//引入exemption clause middleware
+app.use(require('./lib/requiresWaiver.js'));
+
 //app.get 是用来设置路由的方法
 app.get('/', function(req, res) {
   res.render('home');
