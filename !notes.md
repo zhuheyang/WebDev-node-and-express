@@ -114,10 +114,18 @@ Twitter Bootstrap风格
 # session
 
 # middleware
-
 In the previous examples, our middleware will use statement:"return next();" to early terminate,  
 Express does not expect middleware's return value, and it will never use the value to do anythin,  
 Therefore, this just shorten the 'next();' and 'return;'.
+
+### 注意//code.jquery.com/jquery-2.0.2.min.js
+Because of the Internet's reason, the jquery.com demands you climb over 
+the wall to loading, so be careful when you use this cdn!
+You should carefully check your proxy settings so as to let it load fluently.
+
+发现问题的解决方法不应该是苦苦思想如何描述它以免后面的的人不要踩坑,
+而是解决它!
+这是<代码大全>中有提到过的!
  
 
 
