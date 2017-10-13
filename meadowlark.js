@@ -94,7 +94,7 @@ app.use(session({
 }));
 
 //引入exemption clause middleware
-app.use(require('./lib/requiresWaiver.js'));
+app.use(require('./lib/tourRequiresWaivers.js'));
 
 //引入shopping cart validation middleware
 var cartValidation = require('./lib/cartValidation.js');
