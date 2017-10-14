@@ -4,8 +4,6 @@ var app = express();
 
 var fortune = require('./lib/fortune.js');
 
-// var credentials = require('./credentials.js');
-
 //set up handlebars view engine
 //指定了默认布局为main,除非特殊指明,都用这个
 var handlebars = require('express3-handlebars').create({ 
@@ -74,18 +72,15 @@ app.use(function(req, res, next) {
   next();
 });
 
-//设置和访问cookie
-// var cookie = require('cookie-parser');
-// app.use(cookie)(credentials.cookieSecret);
+// 引入下面要使用的cookieSecret.
+var credentials = require('./lib/credentials.js');
 
-//if use code snippet above, it will turns:
-//TypeError: Cannot create property 'next' on string '2p+)L$-zlcIX-TP'
+// 设置和访问cookie
+var cookie = require('cookie-parser');
+app.use(cookie(credentials.cookieSecret));
+
 
 //链入cookie-parser中间件后,链入express-session中间件
-var credentials = {
-  cookieSecret: '2p+)L$-zlcIX-TP',
-};
-
 var session = require('express-session');
 app.use(session({
   resave: false,
@@ -167,6 +162,9 @@ app.get('/newsletter', function(req, res) {
   res.render('newsletter', { csrf:'CSRF token goes there', });
 });
 
+// var VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z\d\-]+)*\.[a-z]+\z/i;
+var VALID_EMAIL_REGEX = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$/;
+
 app.post('/newsletter', function(req, res) {
   var name = req.body.name || '', email = req.body.email || '';
   //input certificate
@@ -180,6 +178,8 @@ app.post('/newsletter', function(req, res) {
     return res.redirect(303, '/newsletter/archive');
   }
 
+// the NewsletterSignup object will be defined later at the mongoose part of this book.
+// check it out!  
   new NewsletterSignup({ name: name, email: email }).save(function(err) {
     if(err) {
       req.session.flash = {
