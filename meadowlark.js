@@ -269,6 +269,40 @@ app.use('/upload', function(req, res, next) {
 //   next();
 // });
 
+// import nodemail, and create an instance to use
+var nodemailer = require('nodemailer');
+var xoauth2 = require('xoauth2');
+
+var mailTransport = nodemailer.createTransport({
+  sevice: 'Gmail',
+  auth: {
+    xoauth2: xoauth2.createXOAuth2Generator({
+      user: credentials.gmail.user,
+      pass: credentials.gmail.password,
+    }),
+  }
+});
+
+// having the instance of mailTransport, we can send the Email now
+/* mailTransport.sendMail({
+  form: '"Meadowlark Travel" <info@meadowlarktravel.com',
+  to: 'joecustomer@gmail.com',
+  subject: 'Your Meadowlark Travel Tour',
+  text: 'Thank you for booking your trip with Meadowlark Travel.' +
+    'We look forward to your visit!',
+}, function(err) {
+  if(err) { console.error('Unable to send email: ' + err); }
+  // if the last err change to "error", there will be comments: error is not define!
+}); */
+
+// or you can send Email to several receiver, as long as you use comma to divide them:
+/* Eg:
+to: 'joe@gmail.con, "Jane Customer" <jane@yahoo.com>,' + 'fred@hotmail.com',
+and everything else is the same. */
+
+// result: Unable to send email: Error: connect ECONNREFUSED 127.0.0.1:587
+
+
 
 //app.use是添加中间件的方法
 //定制404页面 404 catch-all 处理器(中间件middleware)
