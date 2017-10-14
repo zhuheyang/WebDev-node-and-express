@@ -167,57 +167,57 @@ app.get('/newsletter', function(req, res) {
   res.render('newsletter', { csrf:'CSRF token goes there', });
 });
 
-// app.post('/newsletter', function(req, res) {
-//   var name = req.body.name || '', email = req.body.email || '';
-//   //input certificate
-//   if(!email.match(VALID_EMAIL_REGEX)) {
-//     if(req.xhr) { return res.json({ error: 'Invalid name email address.'}); }
-//     req.session.flash = {
-//       type: 'danger',
-//       intro: 'Validation error!',
-//       message: 'The email address you entered was not ',
-//     };
-//     return res.redirect(303, '/newsletter/archive');
-//   }
+app.post('/newsletter', function(req, res) {
+  var name = req.body.name || '', email = req.body.email || '';
+  //input certificate
+  if(!email.match(VALID_EMAIL_REGEX)) {
+    if(req.xhr) { return res.json({ error: 'Invalid name email address.'}); }
+    req.session.flash = {
+      type: 'danger',
+      intro: 'Validation error!',
+      message: 'The email address you entered was not ',
+    };
+    return res.redirect(303, '/newsletter/archive');
+  }
 
-//   new NewsletterSignup({ name: name, email: email }).save(function(err) {
-//     if(err) {
-//       req.session.flash = {
-//         type: 'danger',
-//         intro: 'Database error!',
-//         message: 'There was a database error; please try again later.',
-//       };
-//       return res.redirect(303, '/newsletter/archive');
-//     }
-//     if(req.xhr) { return res.json({ success: true }); }
-//     req.session.flash = {
-//       type: 'success',
-//       intro: 'Thank you!',
-//       message: 'You have now been signed up for the newsletter.',
-//     };
-//     return res.direct(303, '/newsletter/archive');
-//   });
-// });
+  new NewsletterSignup({ name: name, email: email }).save(function(err) {
+    if(err) {
+      req.session.flash = {
+        type: 'danger',
+        intro: 'Database error!',
+        message: 'There was a database error; please try again later.',
+      };
+      return res.redirect(303, '/newsletter/archive');
+    }
+    if(req.xhr) { return res.json({ success: true }); }
+    req.session.flash = {
+      type: 'success',
+      intro: 'Thank you!',
+      message: 'You have now been signed up for the newsletter.',
+    };
+    return res.direct(303, '/newsletter/archive');
+  });
+});
 
 // this is the html one.
-// app.post('/process', function(req, res) {
-//   console.log('From (from querystring): ' + req.query.form);
-//   console.log('CSRF token (from hidden form field): ' + req.body._csrf);
-//   console.log('Name (from visible form field): ' + req.body.name);
-//   console.log('Email (from visible form field): ' + req.body.email);
-//   res.redirect(303,'/thank-you');
-// });
+app.post('/process', function(req, res) {
+  console.log('From (from querystring): ' + req.query.form);
+  console.log('CSRF token (from hidden form field): ' + req.body._csrf);
+  console.log('Name (from visible form field): ' + req.body.name);
+  console.log('Email (from visible form field): ' + req.body.email);
+  res.redirect(303,'/thank-you');
+});
 
 // this is the AJAX one.
-app.post('/process', function(req, res){
-  if(req.xhr || req.accepts('json,html') === 'json') {
-    //if ERROR, send {error: 'error description' }
-    res.send({ success: true });
-  } else {
-    //if ERROR, redirect to ERROR page
-    res.redirect(303, '/thank-you');
-  }
-});
+// app.post('/process', function(req, res){
+//   if(req.xhr || req.accepts('json,html') === 'json') {
+//     //if ERROR, send {error: 'error description' }
+//     res.send({ success: true });
+//   } else {
+//     //if ERROR, redirect to ERROR page
+//     res.redirect(303, '/thank-you');
+//   }
+// });
 
 //add the fomidable modules, and its router handling code
 var formidable = require('formidable');
