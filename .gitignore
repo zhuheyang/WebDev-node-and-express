@@ -3,6 +3,7 @@
 node_modules
 jqfu
 credentials.js
+.eslintrc.json
 *~
 .DS_Store
 # you can put any other files you don't want to check in here,
