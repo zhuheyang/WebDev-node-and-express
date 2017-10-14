@@ -59,6 +59,15 @@ mocha用于页面测试,其中测试通常需要assert(或expect)函数,Node框�
 
 =======================================================================
 
+body-parser在node3.0时已经移出connect部分. namely deprecated.
+define: only connect with the 'json' and 'urlencoded' 's convenient-oriented middleware.
+
+body-parser deprecated bodyParser: use individual json/urlencoded middlewares meadowlark.js:158:31
+body-parser deprecated undefined extended: provide extended option node_modules\body-parser\index.js:105:29
+
+=======================================================================
+
+
 >少了最前面的斜杠"?" 这是很要命的.不要怀疑机器出了问题.
 
 ```bash
@@ -191,6 +200,33 @@ Simple Email Transmission protocols, Main Summit Agent, Main Transmission Agent.
 >This is my own new personal access token now, 
 >It won'be seen again, so I put it in there.
 
+### Nodemailer using gmail, Cannot create property 'mailer' on string 'SMTP'
+>The nodemailer has been reworked, so old code structure could throw such error. 
+>Try use the following structure:
+```
+smtpTrans = nodemailer.createTransport({
+  service: 'Gmail', 
+  auth: {
+    xoauth2: xoauth2.createXOAuth2Generator({
+    user: 'kylevantil14@gmail.com',
+   //and other stuff
+```
+>The current problem Today for help is the change of information faster, 
+>and Alexander was good when he said "nodemailer is reworked";
+
+### mailTransport's define
+```
+// or you can just connect a SMTP server:
+/* var mailTransport = nodemailer.createTransport('SMTP', {
+  host: 'smtp.meadowlarktravel.com',
+  secureConnection: true, // use SSL port: 465
+  auth: {
+    user: credentials.meadowlarkSmtp.user,
+    pass: credentials.meadowlarkSmtp.password,
+  }
+});
+ */
+ ```
 
 
 
