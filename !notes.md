@@ -29,6 +29,15 @@ cp node_modules/mocha/mocha.css public/vendor
 
 =============================================================
 
+>因此对于已经track且有改动的文件添加ignore规则, 如下:
+>
+>git rm -r --cached 要忽略的文件 (如: git rm -r --cahced build/*, 如修改列表中的内容全部是不需要的, 那么你可以使用最最简单的>命令搞定git rm -r --cached .)
+>git add .
+>git commit -m " commet for commit ....."
+>git push
+
+=============================================================
+
 >性能调优第一条原则:先测量,再调优!
 
 BDD Behaviour Driven Development 行为驱动开发
@@ -59,24 +68,24 @@ ensure "done()" is called; if returning a Promise, ensure it resolves.
 时间不够所以测试就没有成功,应该设置时间的,这样子测试就能正常进行了.看看源码找找错误!
 
 # 跨页测试(crosspage-test)的测试结果
-设置了timeout 理所当然没有起作用,实在是对mocha了解不深,任重而道远!
-  Cross-Page Tests
-    1) requesting a group rate quote from the hood river tour page should populate the referrer field
-    2) requesting a group rate from the oregon coast tour page should populate the referrer field
-    ✓ visiting the "request group rate" page directly should result in an empty referred field (807ms)
-  1 passing (6s)
-  2 failing
-
-  1) Cross-Page Tests
-       requesting a group rate quote from the hood river tour page should populate the referrer field:
-  2) Cross-Page Tests
-       requesting a group rate from the oregon coast tour page should populate the referrer field:
-      Uncaught AssertionError: Unspecified AssertionError
-      at qa/tests-crosspage.js:23:11
-      Uncaught AssertionError: Unspecified AssertionError
-      at qa/tests-crosspage.js:35:9
-      at EventLoop.done (node_modules/zombie/lib/eventloop.js:589:11)
-      at Immediate.<anonymous> (node_modules/zombie/lib/eventloop.js:688:71)
+>设置了timeout 理所当然没有起作用,实在是对mocha了解不深,任重而道远!  
+>  Cross-Page Tests  
+>    1) requesting a group rate quote from the hood river tour page should populate the referrer field  
+>    2) requesting a group rate from the oregon coast tour page should populate the referrer field  
+>    ✓ visiting the "request group rate" page directly should result in an empty referred field (807ms)  
+>  1 passing (6s)  
+>  2 failing  
+>
+>  1) Cross-Page Tests
+>       requesting a group rate quote from the hood river tour page should populate the referrer field:
+>  2) Cross-Page Tests
+>       requesting a group rate from the oregon coast tour page should populate the referrer field:
+>      Uncaught AssertionError: Unspecified AssertionError
+>      at qa/tests-crosspage.js:23:11
+>      Uncaught AssertionError: Unspecified AssertionError
+>      at qa/tests-crosspage.js:35:9
+>      at EventLoop.done (node_modules/zombie/lib/eventloop.js:589:11)
+>      at Immediate.<anonymous> (node_modules/zombie/lib/eventloop.js:688:71)
 
 # ESLint
    Eslint: How to disable “unexpected console statement” in Node.js?
@@ -110,23 +119,79 @@ Twitter Bootstrap风格
 # 文件上传
 
 # cookie
+```
+// RequireJS cannot load CommonJS modules as-is. 
+// However, there is a minimal modification you can make to them to load them.
+// use define! 
+var credentials = require('./lib/credentials.js');
+
+// 设置和访问cookie
+var cookie = require('cookie-parser');
+app.use(cookie(credentials.cookieSecret));
+// 之前是app.use(cookie)(credentials.cookieSecret), 结果变成上面那样子就可以运行了, 
+// 妈的路漫漫其修远兮.
+
+//if use code snippet above, it will turns:
+//TypeError: Cannot create property 'next' on string '2p+)L$-zlcIX-TP'
+
+// if happens that: cookieSecret is a string, you can't use its attr as it is an objects,
+// you can use this:
+// var credentials = {
+//   cookieSecret: '2p+)L$-zlcIX-TP',
+// };
+
+```
+
+
+关于Credentials.js无法输出的问题描述与解答:
+Error: Module is not defined in NodeJS:  
+>It seems like you're trying to run the code in a browser,  
+>and the error you're getting is saying that module is not defined. 
+>If this code is intended to be run in a browser, 
+>you'll have to package it with Webpack or Browserify first.
+
+>Node doesn't have its own XmlHttpRequest, 
+>which is something we take for granted in the web/browser world. 
+>This is likely the cause of the errors in your AJAX module. 
+>It is trying to reference a variable (XmlHttpRequest) which doesn't exist, 
+>and since it doesn't exist the file gets an error.
 
 # session
 
 # middleware
-In the previous examples, our middleware will use statement:"return next();" to early terminate,  
-Express does not expect middleware's return value, and it will never use the value to do anythin,  
-Therefore, this just shorten the 'next();' and 'return;'.
+>In the previous examples, our middleware will use statement:"return next();" to early terminate,  
+>Express does not expect middleware's return value, and it will never use the value to do anythin,  
+>Therefore, this just shorten the 'next();' and 'return;'.
 
 ### 注意//code.jquery.com/jquery-2.0.2.min.js
-Because of the Internet's reason, the jquery.com demands you climb over 
-the wall to loading, so be careful when you use this cdn!
-You should carefully check your proxy settings so as to let it load fluently.
+>Because of the Internet's reason, the jquery.com demands you climb over 
+>the wall to loading, so be careful when you use this cdn!
+>You should carefully check your proxy settings so as to let it load fluently.
 
 发现问题的解决方法不应该是苦苦思想如何描述它以免后面的的人不要踩坑,
-而是解决它!
-这是<代码大全>中有提到过的!
- 
+而是解决它!这是<代码大全>中有提到过的!
+
+# 邮件基础知识
+SMTP,简单邮件传输协议 MSA,邮件提交代理 MTA, 邮件传输代理
+Simple Email Transmission protocols, Main Summit Agent, Main Transmission Agent.
+与HTTP请求相像,邮件信息包括头部与主体;
+>who send the Email; send to who; the receive data; topic, etc;
+>those Meta Message was provided by the Email handle Program(Mail handler),
+
+### 判断邮件是否投递成功的两种选择
+1. 使用支持错误报告的MSA
+2. 选择使用直接投递(但很有可能邮件会被标记为垃圾邮件)
+>两种选择都不简单,都超出了该书的范围
+>基础知识要牢固,玩起特定场景的新东西时才会流畅灵活!
+>数学授之以渔,考之以
+>鱽鱾鲀鱿鲃鲂鲉鲌鲄鲆鲅鲇鲏鲊鲋鲐鲈鲍鲎鲝鲘鲙鲗鲓鲖鲞鲛鲒鲚鲜鲟鲔鲕鲑鲧鲬鲪鲫鲩鲣鲨鲡鲢鲤鲠鲥鲦鲺鲯鲹鲴鲶鲳鲮鲭
+>前端也是,基础越深入,玩得也深入.深呼吸!
+
+>1aa21489bb6147e000339f683bcd885160d601f1
+>This is my own new personal access token now, 
+>It won'be seen again, so I put it in there.
+
+
 
 
 
